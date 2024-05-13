@@ -1,20 +1,53 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify,request
 
 app = Flask(__name__)
 
-todos = [
-   {"label": "My first task", "done": False},
-   {"label": "My second task", "done": False},
-   {"label": "My third task", "done": False},
-   {"label": "My fourth task", "done": False},
-   {"label": "My five task", "done": False}
+
+todos =[
+    {"label": "My first task", "done": False},
+    {"label": "My second task", "done": False},
+    {"label": "My third task", "done": False},
+    {"label": "My fourth task", "done": False},
+    {"label": "My five task", "done": False}
+
 ]
 
 @app.route('/todos',methods=['GET'])
+def hello_world():
 
-def  hello_world():
-  todos_json = jsonify(todos)
-  return todos_json,200
+    task = jsonify(todos)
+    return task
+
+
+
+
+
+@app.route('/todos', methods=['POST'])
+def  add_new_todo():
+    request_body = request.json
+    
+
+    if 'label'and 'done' in request_body:
+        todos.append(request_body)
+        return jsonify(todos)
+    else:
+         return({'error': 'LABEL and DONE is requerid'})
+
+
+
+
+@app.route('/todos/<int:position>', methods = ['DELETE'])
+def delete_todo(position):
+    print("This is the position to delete:", position)
+    
+    position = int (position)
+    
+    if position >= 0 :
+        del todos[position]
+        return jsonify(todos)
+
+    else:
+        return ({'error' : 'value no valid'})
 
 
 
