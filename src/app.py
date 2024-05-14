@@ -42,7 +42,7 @@ def delete_todo(position):
     
     position = int (position)
     
-    if position >= 0 :
+    if 0 <= position < len(todos):
         del todos[position]
         return jsonify(todos)
 
